@@ -5,3 +5,6 @@
 -> Criar um markdown com as intruções de uso 
 
 -- Migrando para o novo pattern --
+
+
+-- Migrando as classes estaticas para collections --
