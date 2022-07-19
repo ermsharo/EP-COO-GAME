@@ -3,5 +3,6 @@
         "activityBar.background": "#352844",
         "titleBar.activeBackground": "#4A385F",
         "titleBar.activeForeground": "#FCFCFD"
-    }
+    },
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m"
 }
