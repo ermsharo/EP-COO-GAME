@@ -2,6 +2,14 @@ import java.awt.Color;
 
 //Classe responsavel por gerenciar todas as sessões de usuario
 public class GameSession {
+
+
+
+    public GameSession(){
+
+    
+	}
+
 /* Constantes relacionadas aos estados que os elementos */
 	/* do jogo (player, projeteis ou inimigos) podem assumir. */
 
@@ -18,6 +26,9 @@ public class GameSession {
 			Thread.yield();
 	}
 
+
+
+
     public void runGame(){
 
 		ArrayOps ao = new ArrayOps();
@@ -28,10 +39,11 @@ public class GameSession {
 		EnemyOne e1 = new EnemyOne();
 		EnemyTwo e2 = new EnemyTwo();
 		EnemyProjectile ep  = new EnemyProjectile();
-    /* Indica que o jogo está em execução */
+		Colissions c = new Colissions();
+		StateUpdate su = new StateUpdate();
 
+        
 		boolean running = true;
-
 		/* variáveis usadas no controle de tempo efetuado no main loop */
 
 		long delta;
@@ -39,84 +51,23 @@ public class GameSession {
 
 		/* inicializações */
 
-		// for (int i = 0; i < p_pro.projectile_states.length; i++)
-		// p_pro.projectile_states[i] = INACTIVE;
-		// for (int i = 0; i < ep.e_projectile_states.length; i++)
-		// ep.e_projectile_states[i] = INACTIVE;
-
-		// for (int i = 0; i < e1.enemy1_states.length; i++)
-		// e1.enemy1_states[i] = INACTIVE;
-
-		// for (int i = 0; i < e2.enemy2_states.length; i++)
-		// e2.enemy2_states[i] = INACTIVE;
-
-
-p_pro.init();
-ep.init();
-e1.init();
-e2.init();
-bso.init(); 
-bst.init();
-
-
-
-
-
-		
-		/* iniciado interface gráfica */
+		p_pro.init();
+		ep.init();
+		e1.init();
+		e2.init();
+		bso.init(); 
+		bst.init();
+	
 
 		GameLib.initGraphics();
-		// GameLib.initGraphics_SAFE_MODE(); // chame esta versão do método caso nada
-		// seja desenhado na janela do jogo.
-
-		/*************************************************************************************************/
-		/*                                                                                               */
-		/* Main loop do jogo */
-		/* ----------------- */
-		/*                                                                                               */
-		/* O main loop do jogo executa as seguintes operações: */
-		/*                                                                                               */
-		/*
-		 * 1) Verifica se há colisões e atualiza estados dos elementos conforme a
-		 * necessidade.
-		 */
-		/*                                                                                               */
-		/*
-		 * 2) Atualiza estados dos elementos baseados no tempo que correu entre a última
-		 * atualização
-		 */
-		/*
-		 * e o timestamp atual: posição e orientação, execução de disparos de projéteis,
-		 * etc.
-		 */
-		/*                                                                                               */
-		/*
-		 * 3) Processa entrada do usuário (teclado) e atualiza estados do player
-		 * conforme a necessidade.
-		 */
-		/*                                                                                               */
-		/* 4) Desenha a cena, a partir dos estados dos elementos. */
-		/*                                                                                               */
-		/*
-		 * 5) Espera um período de tempo (de modo que delta seja aproximadamente sempre
-		 * constante).
-		 */
-		/*                                                                                               */
-		/*************************************************************************************************/
 
 		while (running) {
 
-			/* Usada para atualizar o estado dos elementos do jogo */
-			/* (player, projéteis e inimigos) "delta" indica quantos */
-			/* ms se passaram desde a última atualização. */
 
 			delta = System.currentTimeMillis() - currentTime;
-
-			/* Já a variável "currentTime" nos dá o timestamp atual. */
-
 			currentTime = System.currentTimeMillis();
 
-			/***************************/
+            /***************************/
 			/* Verificação de colisões */
 			/***************************/
 
@@ -208,6 +159,7 @@ bst.init();
 				}
 			}
 
+			
 			/***************************/
 			/* Atualizações de estados */
 			/***************************/
@@ -274,7 +226,7 @@ bst.init();
 
 						if (currentTime > e1.enemy1_nextShoot[i] && e1.enemy1_Y[i] < p.player_Y) {
 
-							int free = ao.findFreeIndex(ep.e_projectile_states);
+							int free = ArrayOps.findFreeIndex(ep.e_projectile_states);
 
 							if (free < ep.e_projectile_states.length) {
 
@@ -345,7 +297,7 @@ bst.init();
 						if (shootNow) {
 
 							double[] angles = { Math.PI / 2 + Math.PI / 8, Math.PI / 2, Math.PI / 2 - Math.PI / 8 };
-							int[] freeArray = ao.findFreeIndex(ep.e_projectile_states, angles.length);
+							int[] freeArray = ArrayOps.findFreeIndex(ep.e_projectile_states, angles.length);
 
 							for (int k = 0; k < freeArray.length; k++) {
 
@@ -373,7 +325,7 @@ bst.init();
 
 			if (currentTime > e1.nextEnemy1) {
 
-				int free = ao.findFreeIndex(e1.enemy1_states);
+				int free = ArrayOps.findFreeIndex(e1.enemy1_states);
 
 				if (free < e1.enemy1_states.length) {
 
@@ -427,6 +379,8 @@ bst.init();
 				}
 			}
 
+
+
 			/********************************************/
 			/* Verificando entrada do usuário (teclado) */
 			/********************************************/
@@ -476,6 +430,7 @@ bst.init();
 			if (p.player_Y >= GameLib.HEIGHT)
 				p.player_Y = GameLib.HEIGHT - 1;
 
+
 			/*******************/
 			/* Desenho da cena */
 			/*******************/
@@ -483,6 +438,7 @@ bst.init();
 			/* desenhando plano fundo distante */
 
 			GameLib.setColor(Color.DARK_GRAY);
+			
 			bst.background2_count += bst.background2_speed * delta;
 
 			for (int i = 0; i < bst.background2_X.length; i++) {
@@ -574,17 +530,9 @@ bst.init();
 				}
 			}
 
-			/*
-			 * chamada a display() da classe GameLib atualiza o desenho exibido pela
-			 * interface do jogo.
-			 */
 
 			GameLib.display();
 
-			/*
-			 * faz uma pausa de modo que cada execução do laço do main loop demore
-			 * aproximadamente 3 ms.
-			 */
 
 			busyWait(currentTime + 3);
 		}
@@ -594,12 +542,6 @@ bst.init();
 
 
 
-    public GameSession(){
 
-
-
-    
-    
-}
 
 }

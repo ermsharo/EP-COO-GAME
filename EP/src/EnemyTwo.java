@@ -1,4 +1,5 @@
 
+
 public class EnemyTwo {
 
 	long currentTime = System.currentTimeMillis();

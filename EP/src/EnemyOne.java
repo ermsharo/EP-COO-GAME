@@ -1,5 +1,4 @@
 
-import GlobalVars; 
 
 
 public class EnemyOne {

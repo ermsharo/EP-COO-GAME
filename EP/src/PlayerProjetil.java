@@ -1,4 +1,4 @@
-import GlobalVars; 
+
 
 public class PlayerProjetil {
     

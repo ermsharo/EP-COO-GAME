@@ -1,4 +1,3 @@
-import GlobalVars;
 
 public class EnemyProjectile {
                 /*
